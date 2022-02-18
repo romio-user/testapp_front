@@ -4,5 +4,5 @@ COPY package.json ./
 RUN npm install
 COPY . .
 EXPOSE 3000
-ENV BACKEND_URL=http://172.17.0.3:5000
+ENV BACKEND_URL=http://testapp_backend:5000
 CMD ["node", "server.js"]
