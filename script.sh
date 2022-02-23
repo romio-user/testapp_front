@@ -1,1 +1,1 @@
-aws ecs register-task-definition --cli-input-json file://task-definition.json
+echo "aws ecs register-task-definition --cli-input-json file://front_task_definition.json"
