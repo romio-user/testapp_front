@@ -51,7 +51,7 @@ pipeline {
             steps{
                 withAWS(credentials: registryCredential, region: 'eu-west-1') {
                     script {
-		        sh 'echo ${evn.AWS_DEFAULT_REGION}'
+		        sh 'echo ${env.AWS_DEFAULT_REGION}'
                     }
                 }  
             }
