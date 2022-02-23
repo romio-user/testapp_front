@@ -49,9 +49,11 @@ pipeline {
 
         stage('Deploy') {
             steps{
-                script {
-		    sh './script.sh'
-                    }  
+                withAWS(credentials: registryCredential, region: "${evn.AWS_DEFAULT_REGION}") {
+                    script {
+		        sh 'echo ${evn.AWS_DEFAULT_REGION}'
+                    }
+                }  
             }
         }      
     }
