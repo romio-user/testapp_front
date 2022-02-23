@@ -9,5 +9,5 @@ aws ecs register-task-definition --cli-input-json file://front_task_definition.j
 #####UPDATE SERVICE#####
 task_name=`aws ecs describe-task-definition --task-definition front | grep family | awk '{print $2}' | tr "\"" " " | sed 's/,//g' | sed 's/ //g'`
 task_revision=`aws ecs describe-task-definition --task-definition front | grep revision | awk '{print $2}'`
-task_definition="$task_name:$task_revision
+task_definition="$task_name:$task_revision"
 aws ecs update-service --cluster testapp --service front --task-definition $task_definition  --desired-count 1
