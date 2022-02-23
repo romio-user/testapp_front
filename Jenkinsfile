@@ -35,7 +35,7 @@ pipeline {
         stage('Pushing to ECR') {
             steps{
                 script {
-                                docker.withRegistry("https://" + REPOSITORY_URI, "ecr:${env.AWS_DEFAULT_REGION}:" + registryCredential) {
+                    docker.withRegistry("https://" + REPOSITORY_URI, "ecr:${env.AWS_DEFAULT_REGION}:" + registryCredential) {
                     dockerImage.push()
                         }
                 }
@@ -46,6 +46,16 @@ pipeline {
                 sh "docker rmi ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:${IMAGE_TAG}"
             }
         }
+
+        stage('Deploy') {
+            steps{
+                withAWS(credentials: registryCredential, region: "${evn.AWS_DEFAULT_REGION}") {
+                    script {
+			sh './script.sh'
+                    }  
+                } 
+            }
+        }      
     }
 }
 
