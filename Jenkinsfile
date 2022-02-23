@@ -4,6 +4,8 @@ pipeline {
     environment {
         IMAGE_REPO_NAME="testapp_front"
         IMAGE_TAG="v_${env.BUILD_ID}"
+        EXECUTION_ROLE_ARN = "${env.EXECUTION_ROLE_ARN}"
+        AWS_DEFAULT_REGION = "${env.AWS_DEFAULT_REGION}"
         REPOSITORY_URI = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
         registryCredential = "test_ecs_user"
     }
@@ -35,7 +37,7 @@ pipeline {
         stage('Pushing to ECR') {
             steps{
                 script {
-                    docker.withRegistry("https://" + REPOSITORY_URI, "ecr:${env.AWS_DEFAULT_REGION}:" + registryCredential) {
+                    docker.withRegistry("https://" + REPOSITORY_URI, "ecr:${AWS_DEFAULT_REGION}:" + registryCredential) {
                     dockerImage.push()
                         }
                 }
@@ -49,7 +51,7 @@ pipeline {
 
         stage('Deploy') {
             steps{
-                withAWS(credentials: registryCredential, region: "${env.AWS_DEFAULT_REGION}") {
+                withAWS(credentials: registryCredential, region: "${AWS_DEFAULT_REGION}") {
                     script {
                         sh 'chmod +x script.sh'
 		        sh './script.sh'
